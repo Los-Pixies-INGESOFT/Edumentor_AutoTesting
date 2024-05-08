@@ -29,5 +29,5 @@ class TestLoginCorrecto():
     self.driver.find_element(By.ID, "input_password").send_keys("edumentor1234")
     self.driver.find_element(By.ID, "button_iniciar_sesion").click()
     WebDriverWait(self.driver, 1).until(EC.url_to_be("http://localhost:3001/seleccionar"))
-    assert self.driver.current_url == "http://localhost:3001/seleccionar2"
+    assert self.driver.current_url == "http://localhost:3001/seleccionar"
   
