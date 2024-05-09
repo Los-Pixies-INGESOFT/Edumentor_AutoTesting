@@ -11,7 +11,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
+from selenium.webdriver.support.ui import Select
 class TestLoginCorrecto():
   def setup_method(self, method):
     self.driver = webdriver.Chrome()
@@ -31,3 +31,45 @@ class TestLoginCorrecto():
     WebDriverWait(self.driver, 1).until(EC.url_to_be("http://localhost:3001/seleccionar"))
     assert self.driver.current_url == "http://localhost:3001/seleccionar"
   
+  def test_asignarTutor(self):
+    self.driver.get("http://localhost:3001/login")
+    self.driver.set_window_size(974, 1032)
+    self.driver.find_element(By.ID, "input_email").click()
+    self.driver.find_element(By.ID, "input_email").send_keys("sebastian.cerna@pucp.edu.pe")
+    self.driver.find_element(By.ID, "input_password").click()
+    self.driver.find_element(By.ID, "input_password").send_keys("edumentor1234")
+    self.driver.find_element(By.ID, "button_iniciar_sesion").click()
+    WebDriverWait(self.driver, 2).until(EC.url_to_be("http://localhost:3001/seleccionar"))
+    self.driver.find_element(By.ID, "ResponsabledeFacultad").click()
+    WebDriverWait(self.driver, 2).until(EC.url_to_be("http://localhost:3001/dashboard"))
+    self.driver.find_element(By.ID, "Asignar Tutor").click()
+    time.sleep(2)
+    trigger = WebDriverWait(self.driver, 10).until(
+      EC.element_to_be_clickable((By.ID, "select-tutoria-trigger"))
+    )
+    trigger.click()
+    # Espera a que las opciones sean visibles y selecciona la primera opción
+    # Asume que la clase 'SelectItem' se utiliza para los items individuales
+    primera_opcion = WebDriverWait(self.driver, 10).until(
+      EC.visibility_of_element_located((By.CSS_SELECTOR, "[id^='select-item-tutoria-']:first-child"))
+    )
+    primera_opcion.click()
+    time.sleep(2)
+    trigger = WebDriverWait(self.driver, 10).until(
+      EC.element_to_be_clickable((By.ID, "select-tutor-trigger"))
+    )
+    trigger.click()
+    # Espera a que las opciones sean visibles y selecciona la primera opción
+    # Asume que la clase 'SelectItem' se utiliza para los items individuales
+    primera_opcion = WebDriverWait(self.driver, 10).until(
+      EC.visibility_of_element_located((By.CSS_SELECTOR, "[id^='select-item-tutor-']:first-child"))
+    )
+    primera_opcion.click()
+    time.sleep(2)
+    self.driver.find_element(By.ID, "codigo").click()
+    self.driver.find_element(By.ID, "codigo").send_keys("20202020")
+    self.driver.find_element(By.ID, "button_asignar").click()
+    time.sleep(2)
+    WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.ID, "20202020")))
+    self.driver.find_element(By.ID, "20202020").get_attribute("id")
+    assert self.driver.find_element(By.ID, "20202020").get_attribute("id")== "20202020"
