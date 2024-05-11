@@ -244,4 +244,7 @@ class TestLoginCorrecto():
     individual_radio_button = WebDriverWait(self.driver, 10).until(
       EC.element_to_be_clickable((By.ID,"confirmar_confirmacion_tutoria")))
     individual_radio_button.click()
-
+    primera_opcion = WebDriverWait(self.driver, 10).until(
+      EC.visibility_of_element_located((By.CSS_SELECTOR, "[id^='mensaje_confirmacion']"))
+    )
+    assert primera_opcion.get_attribute("id") == "mensaje_confirmacion"
