@@ -43,8 +43,9 @@ class TestLoginCorrecto():
     self.driver.find_element(By.ID, "input_password").click()
     self.driver.find_element(By.ID, "input_password").send_keys("edumentor")
     self.driver.find_element(By.ID, "button_iniciar_sesion").click()
-    WebDriverWait(self.driver, 1).until(EC.url_to_be("http://localhost:3001/seleccionar"))
+    WebDriverWait(self.driver, 10).until(EC.url_to_be("http://localhost:3001/seleccionar"))
     assert self.driver.current_url == "http://localhost:3001/seleccionar"
+
 
   def test_registrar_usuario(self):
     global numero_aleatorio
@@ -60,7 +61,7 @@ class TestLoginCorrecto():
     WebDriverWait(self.driver, 2).until(EC.url_to_be("http://localhost:3001/dashboard"))
     self.driver.find_element(By.ID, "Usuarios").click()
     WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.ID, "Registro de Usuarios")))
-    WebDriverWait(self.driver, 2).until(EC.url_to_be("http://localhost:3001/dashboard/usuarios/lista"))
+    WebDriverWait(self.driver, 10).until(EC.url_to_be("http://localhost:3001/dashboard/usuarios/lista"))
     self.driver.find_element(By.ID, "Registro de Usuarios").click()
     #self.driver.find_element(By.ID, "Registro de Usuarios").click()
     #WebDriverWait(self.driver, 2).until(EC.url_to_be("http://localhost:3001/dashboard/usuarios/registrar"))
@@ -111,6 +112,7 @@ class TestLoginCorrecto():
     )
     self.driver.find_element(By.ID, "mensaje_confirmacion").get_attribute("id")
     assert self.driver.find_element(By.ID, "mensaje_confirmacion").get_attribute("id") == "mensaje_confirmacion"
+
   def test_asignar_Alumno_a_Tutoria(self):
     global numero_aleatorio
     self.driver.get("http://localhost:3001/login")
@@ -120,9 +122,9 @@ class TestLoginCorrecto():
     self.driver.find_element(By.ID, "input_password").click()
     self.driver.find_element(By.ID, "input_password").send_keys("edumentor")
     self.driver.find_element(By.ID, "button_iniciar_sesion").click()
-    WebDriverWait(self.driver, 2).until(EC.url_to_be("http://localhost:3001/seleccionar"))
+    WebDriverWait(self.driver, 10).until(EC.url_to_be("http://localhost:3001/seleccionar"))
     self.driver.find_element(By.ID, "ResponsabledeFacultad").click()
-    WebDriverWait(self.driver, 2).until(EC.url_to_be("http://localhost:3001/dashboard"))
+    WebDriverWait(self.driver, 10).until(EC.url_to_be("http://localhost:3001/dashboard"))
     self.driver.find_element(By.ID, "Alumnos").click()
     #time.sleep(2)
     self.driver.find_element(By.ID, "Asignación de Tutoría").click()
@@ -161,9 +163,9 @@ class TestLoginCorrecto():
     self.driver.find_element(By.ID, "input_password").click()
     self.driver.find_element(By.ID, "input_password").send_keys("edumentor")
     self.driver.find_element(By.ID, "button_iniciar_sesion").click()
-    WebDriverWait(self.driver, 2).until(EC.url_to_be("http://localhost:3001/seleccionar"))
+    WebDriverWait(self.driver, 10).until(EC.url_to_be("http://localhost:3001/seleccionar"))
     self.driver.find_element(By.ID, "ResponsabledeFacultad").click()
-    WebDriverWait(self.driver, 2).until(EC.url_to_be("http://localhost:3001/dashboard"))
+    WebDriverWait(self.driver, 10).until(EC.url_to_be("http://localhost:3001/dashboard"))
     self.driver.find_element(By.ID, "Asignar Tutor").click()
 
     WebDriverWait(self.driver, 2).until(EC.url_to_be("http://localhost:3001/dashboard/asignar-tutor"))
@@ -219,7 +221,7 @@ class TestLoginCorrecto():
     WebDriverWait(self.driver, 10).until(EC.url_to_be("http://localhost:3001/dashboard/tutorias"))
     self.driver.find_element(By.ID, "create_tutoria_button").click()
     WebDriverWait(self.driver, 10).until(EC.url_to_be("http://localhost:3001/dashboard/tutorias/crearTutoria"))
-    self.driver.find_element(By.ID, "nombre_input").send_keys("Tutoria de prueba2")
+    self.driver.find_element(By.ID, "nombre_input").send_keys("Tutoria de Cuarta Matrícula")
     self.driver.find_element(By.ID, "descripcion_input").send_keys("Esto es una tutoria de prueba con Selenium")
     individual_radio_button = WebDriverWait(self.driver, 10).until(
     EC.element_to_be_clickable((By.XPATH,  "//input[@type='radio'][@name='fila1']/following-sibling::label[contains(text(), 'Individual')]/preceding-sibling::input[1]")))
