@@ -12,6 +12,8 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 import random
 
 nombres = [
@@ -250,3 +252,66 @@ class TestLoginCorrecto():
       EC.visibility_of_element_located((By.CSS_SELECTOR, "[id^='mensaje_confirmacion']"))
     )
     assert primera_opcion.get_attribute("id") == "mensaje_confirmacion"
+  def test_reservarCita(self):
+    self.driver.get("http://localhost:3001/login")
+    self.driver.set_window_size(974, 1032)
+    self.driver.find_element(By.ID, "input_email").click()
+    self.driver.find_element(By.ID, "input_email").send_keys("wilson@pucp.edu.pe")
+    self.driver.find_element(By.ID, "input_password").click()
+    self.driver.find_element(By.ID, "input_password").send_keys("edumentor")
+    self.driver.find_element(By.ID, "button_iniciar_sesion").click()
+    WebDriverWait(self.driver, 10).until(EC.url_to_be("http://localhost:3001/seleccionar"))
+    self.driver.find_element(By.ID, "Alumno").click()
+    WebDriverWait(self.driver, 10).until(EC.url_to_be("http://localhost:3001/dashboard"))
+    self.driver.find_element(By.ID, "Tutorias").click()
+    WebDriverWait(self.driver, 10).until(EC.url_to_be("http://localhost:3001/dashboard/tutorias"))
+    WebDriverWait(self.driver, 10).until(
+      EC.element_to_be_clickable((By.ID,"button-Tutoria de prueba3"  )))
+    self.driver.find_element(By.ID, "button-Tutoria de prueba3").click()
+    WebDriverWait(self.driver, 10).until(EC.url_to_be("http://localhost:3001/dashboard/tutorias/detalle-tutorias/1?tutoriaId=8&alumnoId=1"))
+    self.driver.find_element(By.ID, "solicitar_cita").click()
+    WebDriverWait(self.driver, 10).until(EC.url_to_be("http://localhost:3001/dashboard/tutorias/solicitarCita?tutoriaId=8&idAlumno=1"))
+    self.driver.find_element(By.ID, "input_motivo").click()
+    self.driver.find_element(By.ID, "input_motivo").send_keys("3 laboratorios jalados")
+    individual_radio_button = WebDriverWait(self.driver, 10).until(
+      EC.element_to_be_clickable((By.XPATH,
+                                  '//button[contains(@class, "react-calendar__navigation__next-button") and @aria-label=""]')))
+    individual_radio_button.click()
+    individual_radio_button = WebDriverWait(self.driver, 10).until(
+      EC.element_to_be_clickable((By.XPATH,
+                                  "//button[abbr[@aria-label='3 de junio de 2024']]")))
+    individual_radio_button.click()
+    horas_a_buscar = ['20:00',]
+
+    # Inicializa la variable para el botón encontrado
+    individual_radio_button = None
+
+    # Intenta encontrar el botón con las horas en orden
+    for hora in horas_a_buscar:
+        try:
+            individual_radio_button = WebDriverWait(self.driver, 1).until(
+                EC.element_to_be_clickable((By.XPATH, f'//button[text()="{hora}"]'))
+            )
+            # Si se encuentra el botón, sale del bucle
+            break
+        except TimeoutException:
+            # Si no se encuentra el botón, continúa con la siguiente hora
+            continue
+
+    # Verifica si se encontró un botón
+    if individual_radio_button:
+        individual_radio_button.click()
+        print(f'Botón con la hora {hora} fue clicado.')
+    else:
+        print('No se encontró ningún botón con las horas especificadas.')
+    self.driver.find_element(By.ID, "bttn_agendarCita").click()
+    try:
+      # Espera hasta que el elemento h2 con el id y el texto especificado sea visible
+      mensaje_exito = WebDriverWait(self.driver, 10).until(
+        EC.visibility_of_element_located(
+          (By.ID, "bttn_aceptar"))
+      )
+      print('El mensaje de éxito ha sido encontrado:', mensaje_exito.text)
+    except TimeoutException:
+      print('No se encontró el mensaje de éxito en el tiempo esperado.')
+
