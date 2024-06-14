@@ -15,7 +15,7 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 import random
-
+import unittest
 nombres = [
     'Alejandro', 'Maria', 'Pedro', 'Laura', 'Carlos', 'Ana', 'Jose', 'Sofia', 'Javier', 'Marta',
     'Luis', 'Juan', 'Antonio', 'Cristina', 'Elena', 'Ricardo', 'Fernando', 'Isabel', 'Miguel', 'Lucia',
@@ -29,7 +29,7 @@ apellidos = [
 ]
 
 numero_aleatorio=1
-class TestLoginCorrecto():
+class TestLoginCorrecto(unittest.TestCase):
   def setup_method(self, method):
     self.driver = webdriver.Chrome()
     self.vars = {}
@@ -339,32 +339,36 @@ class TestLoginCorrecto():
     self.driver.find_element(By.ID, "emailInput").send_keys("unida.prueba@pucp.edu.pe")
     self.driver.find_element(By.ID, "guardar_button").click()
     assert WebDriverWait(self.driver, 10).until(
-      EC.visibility_of_element_located((By.ID, "persona_inputError")))
+      EC.visibility_of_element_located((By.ID, "personas_inputError")))
     time.sleep(2)
   def test_NuevaUnidad(self):
-    global numero_aleatorio
-    self.driver.get("http://localhost:3001/login")
-    self.driver.set_window_size(974, 1032)
-    self.driver.find_element(By.ID, "input_email").click()
-    self.driver.find_element(By.ID, "input_email").send_keys("jeremyaldama23.2@gmail.com")
-    self.driver.find_element(By.ID, "input_password").click()
-    self.driver.find_element(By.ID, "input_password").send_keys("edumentor")
-    self.driver.find_element(By.ID, "button_iniciar_sesion").click()
-    WebDriverWait(self.driver, 10).until(EC.url_to_be("http://localhost:3001/seleccionar"))
-    self.driver.find_element(By.ID, "Administrador").click()
-    WebDriverWait(self.driver, 10).until(EC.url_to_be("http://localhost:3001/dashboard"))
-    self.driver.find_element(By.ID, "Unidades").click()
-    WebDriverWait(self.driver, 10).until(EC.url_to_be("http://localhost:3001/dashboard/unidades"))
-    self.driver.find_element(By.ID, "nuevaUnidad").click()
-    WebDriverWait(self.driver, 10).until(
-      EC.element_to_be_clickable((By.ID, "Nombre_unidadInput")))
-    self.driver.find_element(By.ID, "Nombre_unidadInput").click()
-    self.driver.find_element(By.ID, "Nombre_unidadInput").send_keys("Unidad de Prueba Automatizada")
-    self.driver.find_element(By.ID, "persona_input").click()
-    self.driver.find_element(By.ID, "persona_input").send_keys("Robot en pruebas")
-    self.driver.find_element(By.ID, "emailInput").click()
-    self.driver.find_element(By.ID, "emailInput").send_keys("unida.prueba@pucp.edu.pe")
-    self.driver.find_element(By.ID, "guardar_button").click()
-    assert WebDriverWait(self.driver, 10).until(
-      EC.visibility_of_element_located((By.ID, "mensaje_confirmacion")))
-    time.sleep(2)
+    try:
+      self.driver.get("http://localhost:3001/login")
+      self.driver.set_window_size(974, 1032)
+      self.driver.find_element(By.ID, "input_email").click()
+      self.driver.find_element(By.ID, "input_email").send_keys("jeremyaldama23.2@gmail.com")
+      self.driver.find_element(By.ID, "input_password").click()
+      self.driver.find_element(By.ID, "input_password").send_keys("edumentor")
+      self.driver.find_element(By.ID, "button_iniciar_sesion").click()
+      WebDriverWait(self.driver, 10).until(EC.url_to_be("http://localhost:3001/seleccionar"))
+      self.driver.find_element(By.ID, "Administrador").click()
+      WebDriverWait(self.driver, 10).until(EC.url_to_be("http://localhost:3001/dashboard"))
+      self.driver.find_element(By.ID, "Unidades").click()
+      WebDriverWait(self.driver, 10).until(EC.url_to_be("http://localhost:3001/dashboard/unidades"))
+      self.driver.find_element(By.ID, "nuevaUnidad").click()
+      WebDriverWait(self.driver, 10).until(
+        EC.element_to_be_clickable((By.ID, "Nombre_unidadInput")))
+      self.driver.find_element(By.ID, "Nombre_unidadInput").click()
+      self.driver.find_element(By.ID, "Nombre_unidadInput").send_keys("Unidad de Prueba Automatizada")
+      self.driver.find_element(By.ID, "persona_input").click()
+      self.driver.find_element(By.ID, "persona_input").send_keys("Robot en pruebas")
+      self.driver.find_element(By.ID, "emailInput").click()
+      self.driver.find_element(By.ID, "emailInput").send_keys("unida.prueba@pucp.edu.pe")
+      self.driver.find_element(By.ID, "guardar_button").click()
+      confirmation_message = WebDriverWait(self.driver, 10).until(
+        EC.visibility_of_element_located((By.ID, "mensaje_confirmacion2"))
+      )
+      self.assertIsNotNone(confirmation_message, "Confirmation message not found")
+      time.sleep(2)
+    except Exception as e:
+      self.fail(f"Test failed due to unexpected error: {e}")
