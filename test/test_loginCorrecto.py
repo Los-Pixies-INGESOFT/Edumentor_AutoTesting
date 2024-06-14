@@ -302,8 +302,10 @@ class TestLoginCorrecto():
     if individual_radio_button:
         individual_radio_button.click()
         print(f'Botón con la hora {hora} fue clicado.')
+        
     else:
         print('No se encontró ningún botón con las horas especificadas.')
+
     self.driver.find_element(By.ID, "bttn_agendarCita").click()
     try:
       # Espera hasta que el elemento h2 con el id y el texto especificado sea visible
@@ -314,4 +316,55 @@ class TestLoginCorrecto():
       print('El mensaje de éxito ha sido encontrado:', mensaje_exito.text)
     except TimeoutException:
       print('No se encontró el mensaje de éxito en el tiempo esperado.')
-
+  def test_ObligatoriedadPersonaContacto(self):
+    global numero_aleatorio
+    self.driver.get("http://localhost:3001/login")
+    self.driver.set_window_size(974, 1032)
+    self.driver.find_element(By.ID, "input_email").click()
+    self.driver.find_element(By.ID, "input_email").send_keys("jeremyaldama23.2@gmail.com")
+    self.driver.find_element(By.ID, "input_password").click()
+    self.driver.find_element(By.ID, "input_password").send_keys("edumentor")
+    self.driver.find_element(By.ID, "button_iniciar_sesion").click()
+    WebDriverWait(self.driver, 10).until(EC.url_to_be("http://localhost:3001/seleccionar"))
+    self.driver.find_element(By.ID, "Administrador").click()
+    WebDriverWait(self.driver, 10).until(EC.url_to_be("http://localhost:3001/dashboard"))
+    self.driver.find_element(By.ID, "Unidades").click()
+    WebDriverWait(self.driver, 10).until(EC.url_to_be("http://localhost:3001/dashboard/unidades"))
+    self.driver.find_element(By.ID, "nuevaUnidad").click()
+    WebDriverWait(self.driver, 10).until(
+      EC.element_to_be_clickable((By.ID, "Nombre_unidadInput")))
+    self.driver.find_element(By.ID, "Nombre_unidadInput").click()
+    self.driver.find_element(By.ID, "Nombre_unidadInput").send_keys("Unidad de Prueba Automatizada")
+    self.driver.find_element(By.ID, "emailInput").click()
+    self.driver.find_element(By.ID, "emailInput").send_keys("unida.prueba@pucp.edu.pe")
+    self.driver.find_element(By.ID, "guardar_button").click()
+    assert WebDriverWait(self.driver, 10).until(
+      EC.visibility_of_element_located((By.ID, "persona_inputError")))
+    time.sleep(2)
+  def test_NuevaUnidad(self):
+    global numero_aleatorio
+    self.driver.get("http://localhost:3001/login")
+    self.driver.set_window_size(974, 1032)
+    self.driver.find_element(By.ID, "input_email").click()
+    self.driver.find_element(By.ID, "input_email").send_keys("jeremyaldama23.2@gmail.com")
+    self.driver.find_element(By.ID, "input_password").click()
+    self.driver.find_element(By.ID, "input_password").send_keys("edumentor")
+    self.driver.find_element(By.ID, "button_iniciar_sesion").click()
+    WebDriverWait(self.driver, 10).until(EC.url_to_be("http://localhost:3001/seleccionar"))
+    self.driver.find_element(By.ID, "Administrador").click()
+    WebDriverWait(self.driver, 10).until(EC.url_to_be("http://localhost:3001/dashboard"))
+    self.driver.find_element(By.ID, "Unidades").click()
+    WebDriverWait(self.driver, 10).until(EC.url_to_be("http://localhost:3001/dashboard/unidades"))
+    self.driver.find_element(By.ID, "nuevaUnidad").click()
+    WebDriverWait(self.driver, 10).until(
+      EC.element_to_be_clickable((By.ID, "Nombre_unidadInput")))
+    self.driver.find_element(By.ID, "Nombre_unidadInput").click()
+    self.driver.find_element(By.ID, "Nombre_unidadInput").send_keys("Unidad de Prueba Automatizada")
+    self.driver.find_element(By.ID, "persona_input").click()
+    self.driver.find_element(By.ID, "persona_input").send_keys("Robot en pruebas")
+    self.driver.find_element(By.ID, "emailInput").click()
+    self.driver.find_element(By.ID, "emailInput").send_keys("unida.prueba@pucp.edu.pe")
+    self.driver.find_element(By.ID, "guardar_button").click()
+    assert WebDriverWait(self.driver, 10).until(
+      EC.visibility_of_element_located((By.ID, "mensaje_confirmacion")))
+    time.sleep(2)
